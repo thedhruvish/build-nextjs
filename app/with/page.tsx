@@ -1,6 +1,4 @@
-"use client"
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 // Define a type for the product data
 interface Product {
@@ -16,22 +14,19 @@ interface Product {
   };
 }
 
+interface AboutProps {
+  products: Product[];
+}
+
 export default async function About() {
-  const [data, setData] = useState<Product[]>([]); // State typed with Product[]
-
-  useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => res.json())
-      .then((json) => {setData(json);console.log(json)})
-      .catch((err) => console.error("Error fetching data:", err));
-  }, []);
-
+  const res = await fetch("https://fakestoreapi.com/products");
+  const products: Product[] = await res.json();
   return (
     <>
       <h1>About</h1>
-      {data.length > 0 ? (
+      {products.length > 0 ? (
         <ul>
-          {data.map((item) => (
+          {products.map((item) => (
             <li key={item.id}>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
@@ -39,14 +34,19 @@ export default async function About() {
                 <strong>Price:</strong> ${item.price}
               </p>
               <p>
-                <strong>Rating:</strong> {item.rating.rate} ({item.rating.count} reviews)
+                <strong>Rating:</strong> {item.rating.rate} ({item.rating.count}{" "}
+                reviews)
               </p>
-              <img src={item.image} alt={item.title} style={{ maxWidth: "100px" }} />
+              <img
+                src={item.image}
+                alt={item.title}
+                style={{ maxWidth: "100px" }}
+              />
             </li>
           ))}
         </ul>
       ) : (
-        <p>Loading data...</p>
+        <p>No products available.</p>
       )}
       <div>
         Back to <Link href="/">Home</Link>
