@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -16,13 +16,17 @@ interface Product {
   };
 }
 
-export default async function About() {
+export default function About() {
   const [data, setData] = useState<Product[]>([]); // State typed with Product[]
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
-      .then((json) => {setData(json);console.log(json)})
+      .then((json) => {
+        console.log(json)
+        setData(json);
+
+      })
       .catch((err) => console.error("Error fetching data:", err));
   }, []);
 
@@ -39,9 +43,14 @@ export default async function About() {
                 <strong>Price:</strong> ${item.price}
               </p>
               <p>
-                <strong>Rating:</strong> {item.rating.rate} ({item.rating.count} reviews)
+                <strong>Rating:</strong> {item.rating.rate} ({item.rating.count}{" "}
+                reviews)
               </p>
-              <img src={item.image} alt={item.title} style={{ maxWidth: "100px" }} />
+              <img
+                src={item.image}
+                alt={item.title}
+                style={{ maxWidth: "100px" }}
+              />
             </li>
           ))}
         </ul>
